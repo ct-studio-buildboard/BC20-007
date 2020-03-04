@@ -1,0 +1,33 @@
+company:
+  name: Team ZATAM (Express Scripts)
+  logo: pics/logo.png
+product_narrative: |
+  BRIDGE: Traditionally, any new drug prescription takes 3-21 days to be verified. This results in delayed treatment & lost customers. We propose an automated drug discovery & prescription verification app, giving instant results right in the first meeting  between doctor & patient.
+team:
+  picture: pics/team.jpg
+  roster:
+  - name: Terrill Jones
+    email: tsj9@cornell.edu
+    picture: pics/TERRIL.jpeg
+    program: ORIE
+  - name: Avnish Kumar
+    email: ak2626@cornell.edu
+    picture: pics/AVNISH.jpeg
+    program: CS
+  - name: Hyunseung Lee
+    email: hl2377@cornell.edu
+    picture: pics/MADDIE.jpeg
+    program: Design
+  - name: Zwee Dao
+    email: td373@cornell.edu
+    picture: pics/ZWEE.jpeg
+    program: ECE
+  - name: Ananya Shivaditya
+    email: aks298@cornell.edu
+    picture: pics/ANANYA.jpeg
+    program: CS
+assets:
+- title: Sprint 1
+  url: https://github.com/ct-studio-buildboard/BC20-007/blob/master/site/Sprint%201.pdf
+- title: Crit 1
+  url: https://github.com/ct-studio-buildboard/BC20-007/blob/master/site/Crit%201.pdf
