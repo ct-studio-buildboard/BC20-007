@@ -2,7 +2,7 @@ company:
   name: Team ZATAM (Express Scripts)
   logo: pics/logo.png
 product_narrative: |
-  BRIDGE: Traditionally, any new drug prescription takes 3-21 days to be verified. This results in delayed treatment & lost customers. We propose an automated drug discovery & prescription verification app, giving instant results right in the first meeting  between doctor & patient.
+  AutoMed: Traditionally, any new drug prescription takes 3-21 days to be verified. This results in delayed treatment & lost customers. We propose an automated drug discovery & prescription verification app, giving instant results right in the first meeting  between doctor & patient.
 team:
   picture: pics/team.jpg
   roster:
