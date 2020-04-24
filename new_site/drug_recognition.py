@@ -26,7 +26,6 @@ def detect_drugs(text_file):
 	nlp = en_ner_bc5cdr_md.load()
 
 	#the input text file
-	text_file = sys.argv[1]
 	text = open(text_file, "r").read()
 
 	#use NLP model to parse the text
