@@ -20,9 +20,9 @@
 		{%if result|length > 0%}
 			{%for i in range(result|length)%}
 				{%if result[i].num > 1%}
-					<h1>{{result[i].name}} has {{result[i].num}} alternatives:</h1>
+					<h1>{{result[i].name}} top {{result[i].num}} alternatives:</h1>
 				{%else%}
-					<h1>{{result[i].name}} has 1 alternative:</h1>
+					<h1>{{result[i].name}} top alternative:</h1>
 				{%endif%}
 				<table style="margin-left: 20px;"> 
 				    <th> 
