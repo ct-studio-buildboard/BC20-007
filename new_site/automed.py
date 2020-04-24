@@ -50,4 +50,4 @@ def handle_data():
 		return render_template("automed_success.html", result = result,no=no)
 
 if __name__ == "__main__":
-	app.run()(debug=True)
+    app.run('0.0.0.0')(debug=False)
