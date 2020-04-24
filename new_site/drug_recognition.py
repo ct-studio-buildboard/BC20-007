@@ -16,7 +16,8 @@
 # Step 3: To run from code
 #	Pass 'text_file' into function 'detect_drugs'
 
-#### Medical NER
+
+#### Drug Recognition model
 import sys
 import spacy  #pip install -U spacy
 import scispacy  #pip install scispacy
@@ -24,7 +25,7 @@ import en_ner_bc5cdr_md  #pip install https://s3-us-west-2.amazonaws.com/ai2-s2-
 
 
 def detect_drugs(text_file):
-	#nlp model for drug recognition
+	#NLP model for drug recognition
 	nlp = en_ner_bc5cdr_md.load()
 
 	#the input text file
