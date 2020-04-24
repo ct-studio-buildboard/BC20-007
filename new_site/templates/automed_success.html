@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>AutoMed: Prescription Medication Saver</title>
+	</head>
+
+	<style type="text/css"> 
+		th: tr{ color: blue; } 
+		tr: nth-of-type(2n){ 
+    		border: 1px solid grey; 
+    		background-color: rgba(150, 150, 150, 0.5);
+    		} 
+    	td{
+    		padding: 8px 8px;
+    		border: 1px solid grey;
+    		} 
+    </style>
+
+	<Body> 
+		{%if result|length > 0%}
+			{%for i in range(result|length)%}
+				{%if result[i].num > 1%}
+					<h1>{{result[i].name}} has {{result[i].num}} alternatives:</h1>
+				{%else%}
+					<h1>{{result[i].name}} has 1 alternative:</h1>
+				{%endif%}
+				<table style="margin-left: 20px;"> 
+				    <th> 
+				        <tr style="color: blue; ">     
+				        <td>Rank</td> 
+				        <td>Alternate</td> 
+				        <td>Price</td>
+				        </tr> 
+				    </th> 
+
+				    {% for alt in range(result[i].num) %}
+				  		<tr> 
+				        	<td>{{alt+1}}</td> 
+				        	<td>{{result[i].s[alt]}}</td> 
+				        	<td>{{result[i].p[alt]}}</td> 
+				    	</tr> 
+				    {%endfor%} 
+				</table> 
+			{%endfor%}
+		{%endif%}
+
+		{%if no|length > 0%}
+			{%for i in range(0,no|length)%}
+				<h1>No alternatives found for drug: {{ no[i] }}</h1>
+			{%endfor%}
+		{%endif%}
+	</Body>
+</html>
