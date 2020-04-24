@@ -19,9 +19,6 @@ import sys
 import spacy  #pip install -U spacy
 import scispacy  #pip install scispacy
 import en_ner_bc5cdr_md  #pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.4/en_ner_bc5cdr_md-0.2.4.tar.gz
-from spacy import displacy
-from scispacy.abbreviation import AbbreviationDetector
-from scispacy.umls_linking import UmlsEntityLinker
 
 
 def detect_drugs(text_file):
