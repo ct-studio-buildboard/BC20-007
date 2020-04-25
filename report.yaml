@@ -1,5 +1,5 @@
 company:
-  name: Team ZATAM (Express Scripts)
+  name: ZATAM (Express Scripts)
   logo: pics/logo.png
 product_narrative: |
   AutoMed: Traditionally, any new drug prescription takes 3-21 days to be verified. This results in delayed treatment & lost customers. We propose an automated drug discovery & prescription verification app, giving instant results right in the first meeting  between doctor & patient.
@@ -31,3 +31,11 @@ assets:
   url: https://github.com/ct-studio-buildboard/BC20-007/blob/master/site/Sprint%201.pdf
 - title: Crit 1
   url: https://github.com/ct-studio-buildboard/BC20-007/blob/master/site/Crit%201.pdf
+- title: Sprint 2
+  url: https://github.com/ct-studio-buildboard/BC20-007/blob/master/site/Sprint%202.pdf
+- title: Crit 2
+  url: https://github.com/ct-studio-buildboard/BC20-007/blob/master/site/Crit%202.pdf
+- title: Crit 3
+  url: https://github.com/ct-studio-buildboard/BC20-007/blob/master/site/Crit%203.pdf
+- title: Sprint 3
+  url: https://github.com/ct-studio-buildboard/BC20-007/blob/master/site/Sprint%203.pdf
