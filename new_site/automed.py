@@ -7,9 +7,9 @@ from tesserocr import PyTessBaseAPI
 
 
 
-def getOCR(file):
+def getOCR():
     with PyTessBaseAPI() as api:
-        api.SetImageFile(file)
+        api.SetImageFile('pres.jpg')
         print(api.GetUTF8Text())
         api.AllWordConfidences()
 #from flask_socketio import SocketIO, emit, join_room, leave_room
@@ -79,7 +79,8 @@ def home():
 @app.route('/uploadPres' , methods=['POST'])
 def get_image():
 	file = request.files['imgFile'].read() ## byte file
-	getOCR(file)
+	file.save('pres.jpg')
+	getOCR()
 	return jsonify({'status':"SUCCESS"})
 
 @app.route('/handle_data', methods=['POST','GET'])
