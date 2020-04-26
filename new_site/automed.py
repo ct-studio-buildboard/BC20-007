@@ -78,7 +78,7 @@ def home():
 
 @app.route('/uploadPres' , methods=['POST'])
 def get_image():
-	file = request.files['imgFile'].read() ## byte file
+	file = request.files['imgFile'] ## byte file
 	file.save('pres.jpg')
 	getOCR()
 	return jsonify({'status':"SUCCESS"})
