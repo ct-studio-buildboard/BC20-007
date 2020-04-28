@@ -45,8 +45,16 @@
 		{%endif%}
 
 		{%if no|length > 0%}
+
 			{%for i in range(0,no|length)%}
 				<h1>No alternatives found for drug: {{ no[i] }}</h1>
+			{%endfor%}
+		{%endif%}
+
+		{%if warnings|length > 0%}
+			<h1>Warnings based on drug interactions:</h1>
+			{%for i in range(0,warnings|length)%}
+				<p>{{i+1}}. {{ warnings[i] }}</p>
 			{%endfor%}
 		{%endif%}
 	</Body>

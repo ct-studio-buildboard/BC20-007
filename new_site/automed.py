@@ -2,6 +2,8 @@ from flask import Flask, render_template, request
 import pandas as pd
 import numpy as np
 import Levenshtein as lev #pip install python-levenshtein
+import requests
+import xmltodict
 
 def search(drug,row):
     try:
@@ -11,7 +13,7 @@ def search(drug,row):
             for word in row:
                 #Levenshtein distance ratio
                 ratio = lev.ratio(drug, word)
-                if ratio > 0.8:
+                if ratio > 0.9:
                     return True
             return False
     except:
@@ -36,6 +38,7 @@ drug_data["Ingredient"] = drug_data["Ingredient"].str.lower()
 drug_data['Ingredient'] = drug_data['Ingredient'].str.split(';| ')
 drug_data['Name'] = drug_data['Trade_Name'].str.split(';| ')
 
+
 app = Flask(__name__)
 
 @app.route("/")
@@ -44,7 +47,10 @@ def home():
 
 @app.route('/handle_data', methods=['POST','GET'])
 def handle_data():
+
     if request.method == "POST":
+        url = "https://rxnav.nlm.nih.gov/REST/rxcui?name="
+        ids = []
         
         new_pres_drug = request.form['drug']
         new_pres_drug = new_pres_drug.lower().split(",")
@@ -53,6 +59,12 @@ def handle_data():
         no = []
 
         for drug in new_pres_drug:
+
+            drug_id = xmltodict.parse(requests.get(url+drug).text)
+            response = drug_id['rxnormdata']['idGroup']
+            if 'rxnormId' in response:
+                ids.append(response['rxnormId'])
+        
             a = drug_data.apply(lambda row : search(drug,row['Ingredient']), axis = 1)
             b = drug_data.apply(lambda row : search(drug,row['Name']), axis = 1)
 
@@ -72,7 +84,14 @@ def handle_data():
             else:
                 no.append(drug)
 
-        return render_template("automed_success.html", result = result,no=no)
+        if ids:
+            url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
+            interactions = requests.get(url+"+".join(ids)).json()
+            warnings = []
+            for j in interactions['fullInteractionTypeGroup'][0]['fullInteractionType']:
+                warnings.append(j['interactionPair'][0]['description'])
+
+        return render_template("automed_success.html", result = result,no=no,warnings=warnings)
 
 if __name__ == "__main__":
     app.run('0.0.0.0')(debug=False)
