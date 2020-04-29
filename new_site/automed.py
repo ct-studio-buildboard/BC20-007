@@ -81,12 +81,14 @@ def handle_data():
                 #add drug name to Not Found list
                 drug_name = drug
                 no.append(drug_name.title())
-        
+            
+            #find interaction of this drug
             drug_id = xmltodict.parse(requests.get(url+drug_name).text)
             response = drug_id['rxnormdata']['idGroup']
             if 'rxnormId' in response:
                 ids.append(response['rxnormId'])
 
+        #check interactions between drugs in Rx
         warnings = []
 
         url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
