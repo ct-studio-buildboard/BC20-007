@@ -9,23 +9,59 @@ import spacy  #pip install -U spacy
 import scispacy  #pip install scispacy
 import en_ner_bc5cdr_md  #pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.4/en_ner_bc5cdr_md-0.2.4.tar.gz
 import re
+import Levenshtein as lev #pip install python-levenshtein
+MATCH_RATIO = 0.9
+#import xmltodict
 
+#levenstiend dist search with match ratio
+def search(drug,row):
+    try:
+        if drug in row:
+            return True
+        else:
+            for word in row:
+                #Levenshtein distance ratio
+                ratio = lev.ratio(drug, word)
+                if ratio > MATCH_RATIO:
+                    return True
+            return False
+    except:
+        return False
+
+def correct_drug_name(drug, names):
+    for row in names:
+        if drug in row:
+            return drug
+        else:
+            for word in row:
+                #Levenshtein distance ratio
+                ratio = lev.ratio(drug, word)
+                if ratio > 0.8:
+                    return word
+            return False
+
+#extract biomedical information from extracted text
 nlp = en_ner_bc5cdr_md.load()
 def detect_drugs(text):
-	#NLP model for drug recognition
-	#nlp = en_ner_bc5cdr_md.load()
-	#the input text file
-	#use NLP model to parse the text
+        #NLP model for drug recognition
+        #nlp = en_ner_bc5cdr_md.load()
+        #the input text file
+        #use NLP model to parse the text
 
-	parsed_text = nlp(text)
-	#extract entities/ drug names
-	entities = parsed_text.ents
-	#print entities
-	print("List of entities:", entities)
-	return entities
+        parsed_text = nlp(text)
+        #extract entities/ drug names
+        entities = parsed_text.ents
+        #print entities
+        print("List of entities:", entities)
+        return entities
 
-
+#do OCR on the uploaded image
 def getOCR():
+    '''
+    Function to do OCR on image
+
+    :rtype : List of biomedical entities
+    '''
     extract = ''
     with PyTessBaseAPI() as api:
         api.SetImageFile('pres.jpg')
@@ -99,53 +135,59 @@ def home():
 
 @app.route('/uploadPres' , methods=['POST'])
 def get_image():
-	file = request.files['imgFile'] ## byte file
-	file.save('pres.jpg')
-	return handle_data_backend(getOCR())
+        file = request.files['imgFile'] ## byte file
+        file.save('pres.jpg')
+        return handle_data_backend(getOCR())
 
 @app.route('/handle_data', methods=['POST','GET'])
 def handle_data():
-	if request.method == "POST":		
-		new_pres_drug = request.form['drug']
-		new_pres_drug = new_pres_drug.lower().split(",")
-		result = []
-		no = []
-		interaction=[]
-		for drug in new_pres_drug:  
-			interaction.append(getRxCui(drug))
-			a = drug_data.apply(lambda row : search(drug,row['Ingredient']), axis = 1)
-			b = drug_data.apply(lambda row : search(drug,row['Name']), axis = 1)
-			substitutes = drug_data[a | b].sort_values('Price').head(5)
-			n = len(substitutes)
+        if request.method == "POST":            
+                new_pres_drug = request.form['drug']
+                new_pres_drug = new_pres_drug.lower().split(",")
+                result = []
+                no = []
+                #interaction=[]
+                for drug in new_pres_drug:  
+                        #interaction.append(getRxCui(drug))
+                        a = drug_data.apply(lambda row : search(drug,row['Ingredient']), axis = 1)
+                        b = drug_data.apply(lambda row : search(drug,row['Name']), axis = 1)
+                        substitutes = drug_data[a | b].sort_values('Price').head(5)
+                        n = len(substitutes)
 
-			if n > 0 and drug:
-				prices = list(substitutes['Price'])
-				subs = list(substitutes['Trade_Name'])
-				result.append({'name':drug.upper(),'num':n,'s':subs,'p':prices})
-			else:
-				no.append(drug)
-		print(getInteractions("+".join(interaction)))
-		return render_template("automed_success.html", result = result,no=no)
+                        if n > 0 and drug:
+                            drug_name = correct_drug_name(drug, substitutes['Name'])
+                            if not drug_name:
+                                drug_name = correct_drug_name(drug, substitutes['Ingredient'])
+                            prices = list(substitutes['Price'])
+                            subs = list(substitutes['Trade_Name'])
+                            result.append({'name':drug.upper(),'num':n,'s':subs,'p':prices})
+                        else:
+                            no.append(drug)
+                #print(getInteractions("+".join(interaction)))
+                return render_template("automed_success.html", result = result,no=no)
 
-def handle_data_backend(new_pres_drug):	
-	result = []
-	no = []
-	#interaction=[]		
-	for drug in new_pres_drug:  
-		#interaction.append(getRxCui(drug))
-		a = drug_data.apply(lambda row : search(drug.lower(),row['Ingredient']), axis = 1)
-		b = drug_data.apply(lambda row : search(drug.lower(),row['Name']), axis = 1)
-		substitutes = drug_data[a | b].sort_values('Price').head(5)
-		n = len(substitutes)
+def handle_data_backend(new_pres_drug): 
+        result = []
+        no = []
+        #interaction=[]         
+        for drug in new_pres_drug:  
+                #interaction.append(getRxCui(drug))
+                a = drug_data.apply(lambda row : search(drug.lower(),row['Ingredient']), axis = 1)
+                b = drug_data.apply(lambda row : search(drug.lower(),row['Name']), axis = 1)
+                substitutes = drug_data[a | b].sort_values('Price').head(5)
+                n = len(substitutes)
 
-		if n > 0 and drug:
-			prices = list(substitutes['Price'])
-			subs = list(substitutes['Trade_Name'])
-			result.append({'name':drug.upper(),'num':n,'s':subs,'p':prices})
-		# else:
-		# 	no.append(drug.lower())
-	#print(getInteractions("+".join(interaction)))
-	return render_template("automed_success.html", result = result,no=no)
+                if n > 0 and drug:
+                    drug_name = correct_drug_name(drug, substitutes['Name'])
+                    if not drug_name:
+                        drug_name = correct_drug_name(drug, substitutes['Ingredient'])
+                    prices = list(substitutes['Price'])
+                    subs = list(substitutes['Trade_Name'])
+                    result.append({'name':drug.upper(),'num':n,'s':subs,'p':prices})
+                else:
+                    no.append(drug.lower())
+        #print(getInteractions("+".join(interaction)))
+        return render_template("automed_success.html", result = result,no=no)
 
 
 
