@@ -13,7 +13,7 @@ def search(drug,row):
             for word in row:
                 #Levenshtein distance ratio
                 ratio = lev.ratio(drug, word)
-                if ratio > 0.9:
+                if ratio > 0.8:
                     return True
             return False
     except:
@@ -86,9 +86,9 @@ def handle_data():
         
         warnings = []
 
-        if ids:
-            url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
-            interactions = requests.get(url+"+".join(ids)).json()
+        url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
+        interactions = requests.get(url+"+".join(ids)).json()
+        if 'fullInteractionTypeGroup' in interactions:
             for j in interactions['fullInteractionTypeGroup'][0]['fullInteractionType']:
                 warnings.append(j['interactionPair'][0]['description'])
 
