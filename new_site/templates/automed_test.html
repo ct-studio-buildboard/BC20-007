@@ -177,6 +177,36 @@ for (i = 0; i < close.length; i++) {
   }
 }
 
+function handleFileSelect(ele){
+    var file = ele.target.files[0];
+    var fileReader = new FileReader();
+    fileReader.readAsDataURL(file)
+    fileReader.onload = () => {
+        var arrayBuffer = fileReader.result; 
+        socketControl.uploadImage({ 
+            name: file.name, 
+            type: file.type, 
+            size: file.size, 
+            binary: arrayBuffer 
+         });
+     }
+}
+
+function handleFileSelect(ele){
+    var file = ele.target.files[0];
+    var fileReader = new FileReader();
+    fileReader.readAsArrayBuffer(file); 
+    fileReader.onload = () => {
+        var arrayBuffer = fileReader.result; 
+        socketControl.uploadImage({ 
+            name: file.name, 
+            type: file.type, 
+            size: file.size, 
+            binary: arrayBuffer 
+         });
+     }
+}
+
 
 // Create a new list item when clicking on the "Add" button
 function newElement() {
@@ -222,6 +252,11 @@ function myFunction() {
       </form>
       <button type="Other Submit" id= 'submitButton' class="btn btn-primary btn-block btn-large" onclick="myFunction()">Submit</button>
   </div>
+
+<form method ="POST" action="/uploadPres" enctype = "multipart/form-data">
+  <input type='file' name = 'imgFile' accept=".jpg,.png">
+  <input type="submit" value="upload">
+</form>
 
 </body>
 </html>
