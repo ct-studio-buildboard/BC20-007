@@ -90,7 +90,7 @@ def handle_data():
         interactions = requests.get(url+"+".join(ids)).json()
         if 'fullInteractionTypeGroup' in interactions:
             for j in interactions['fullInteractionTypeGroup'][0]['fullInteractionType']:
-                warnings.append(j['interactionPair'][0]['description'])
+                warnings.append([j['interactionPair'][0]['description'],j['minConcept'][0]['name'],j['minConcept'][1]['name']])
 
         return render_template("automed_success.html", result = result,no=no,warnings=warnings)
 
