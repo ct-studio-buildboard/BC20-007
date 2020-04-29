@@ -65,7 +65,7 @@
 
 		{%if warnings|length > 0%}
 			<hr>
-			<h1><center><strong>Interaction warnings:</strong></center></h1>
+			<h1 style="color:#E35646"><center><strong>Interaction warnings:</strong></center></h1>
 			{%for i in range(0,warnings|length)%}
 				<p><center>{{i+1}}. {{ warnings[i][1] }} + {{ warnings[i][2] }} : {{ warnings[i][0] }}</center></p>
 			{%endfor%}
