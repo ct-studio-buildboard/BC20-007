@@ -59,12 +59,8 @@ def handle_data():
         no = []
 
         for drug in new_pres_drug:
-
-            drug_id = xmltodict.parse(requests.get(url+drug).text)
-            response = drug_id['rxnormdata']['idGroup']
-            if 'rxnormId' in response:
-                ids.append(response['rxnormId'])
-        
+            
+            #search for drug in database
             a = drug_data.apply(lambda row : search(drug,row['Ingredient']), axis = 1)
             b = drug_data.apply(lambda row : search(drug,row['Name']), axis = 1)
 
@@ -80,10 +76,17 @@ def handle_data():
                 #print results of alternatives
                 prices = list(substitutes['Price'])
                 subs = list(substitutes['Trade_Name'])
-                result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
+                result.append({'name':drug_name.title(),'num':n,'s':subs,'p':prices})
             else:
-                no.append(drug)
+                #add drug name to Not Found list
+                drug_name = drug
+                no.append(drug_name.title())
         
+            drug_id = xmltodict.parse(requests.get(url+drug_name).text)
+            response = drug_id['rxnormdata']['idGroup']
+            if 'rxnormId' in response:
+                ids.append(response['rxnormId'])
+
         warnings = []
 
         url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="

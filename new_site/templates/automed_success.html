@@ -32,9 +32,9 @@
 		{%if result|length > 0%}
 			{%for i in range(result|length)%}
 				{%if result[i].num > 1%}
-					<h1><center><strong>{{result[i].name}} top {{result[i].num}} alternatives:</strong></center></h1>
+					<h1><center><strong>{{result[i].name}}: top {{result[i].num}} alternatives</strong></center></h1>
 				{%else%}
-					<h1><center><strong>{{result[i].name}} top alternative:</strong></center></h1>
+					<h1><center><strong>{{result[i].name}}: top alternative</strong></center></h1>
 				{%endif%}
 				<center><table style="margin-left: 20px;"> 
 				    <th> 
@@ -59,12 +59,13 @@
 		{%if no|length > 0%}
 
 			{%for i in range(0,no|length)%}
-				<h1><center><strong>No alternatives found for drug: {{ no[i] }}</strong></center></h1>
+				<h1><center><strong>{{ no[i] }}: No alternatives found</strong></center></h1>
 			{%endfor%}
 		{%endif%}
 
 		{%if warnings|length > 0%}
-			<h1><center><strong>Warnings based on drug interactions:</strong></center></h1>
+			<hr>
+			<h1><center><strong>Interaction warnings:</strong></center></h1>
 			{%for i in range(0,warnings|length)%}
 				<p><center>{{i+1}}. {{ warnings[i][1] }} + {{ warnings[i][2] }} : {{ warnings[i][0] }}</center></p>
 			{%endfor%}
