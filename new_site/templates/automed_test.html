@@ -138,20 +138,46 @@ input {
     background-color: #80CAF7;
     color: #fff;
   }
+
+
+/* Apr29 Design Update */
+
+.btn-upload {
+  border-radius:25px;
+  width: 25%;
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #80CAF7;
+  border: 1px solid #80CAF7;
+  color: #000;
+  float: left;
+  text-align: center;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.btn-upload:hover {
+    background-color: #80CAF7;
+    color: #fff;
+  }
+
+.file-wrapper {
+  width: 100%;
+  height: 100px;
+  margin: 0 auto;
+  background-color: #fff;
+  padding: 30px 40px;
+}
+
+.file-input {
+  background-color:#fff;
+}
+
 </style>
 </head>
 <body>
 
-  <div id="myDIV" class="header">
-    <!--h2 style="margin:5px; font-size: 30px; color:#000; padding-bottom: 20px;">Enter Your Prescription Medications</h2-->
-    <center><img src="static/images/automed-logo.png"></center>
-    <input type="text" id="myInput" placeholder="Enter Your Prescription Medications">
-    <span onclick="newElement()" class="addBtn" style="border-radius:25px;">Add</span>
-  </div>
 
-<ul id="myUL">
-  
-</ul>
 
 <script>
 // Create a "close" button and append it to each list item
@@ -244,19 +270,32 @@ function myFunction() {
 
 </script>
 
+  <div id="myDIV" class="header">
+      <!--h2 style="margin:5px; font-size: 30px; color:#000; padding-bottom: 20px;">Enter Your Prescription Medications</h2-->
+      <center><img src="static/images/automed-logo.png"></center>
+      <input type="text" id="myInput" placeholder="Enter Your Prescription Medications">
+      <span onclick="newElement()" class="addBtn" style="border-radius:25px;">Add</span>
+
+    </div>
+
+  <ul id="myUL">
+    
+  </ul>
+
+
   <div class="login">
       <h1></h1>
       <form action="/handle_data" method="post">
           <input type="text" name="drug" placeholder="Your Prescription Drugs" id = 'drugList' required="required" style="display: none;"/>
-          <center><button type="submit" class="btn btn-primary btn-block btn-large" style="display: none; width: 80%;">Submit</button></center>
+          <center><button type="submit" class="btn btn-primary btn-block btn-large" style="display: none; width: 100%;">Submit</button></center>
       </form>
       <button type="Other Submit" id= 'submitButton' class="btn btn-primary btn-block btn-large" onclick="myFunction()">Submit</button>
   </div>
 
-<form method ="POST" action="/uploadPres" enctype = "multipart/form-data">
-  <input type='file' name = 'imgFile' accept=".jpg,.png">
-  <input type="submit" value="upload">
-</form>
+  <form class="file-wrapper" method ="POST" action="/uploadPres" enctype = "multipart/form-data">
+    <input class="file-input" type='file' name = 'imgFile' accept=".jpg,.png">
+    <input class="file-input btn-upload" type="submit" value="Upload">
+  </form>
 
 </body>
 </html>
