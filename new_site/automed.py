@@ -75,7 +75,7 @@ def handle_data():
 
                 #print results of alternatives
                 prices = list(substitutes['Price'])
-                subs = list(substitutes['Trade_Name'])
+                subs = list(substitutes['Trade_Name'].str.title())
                 result.append({'name':drug_name.title(),'num':n,'s':subs,'p':prices})
             else:
                 #add drug name to Not Found list
