@@ -83,11 +83,12 @@ def handle_data():
                 result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
             else:
                 no.append(drug)
+        
+        warnings = []
 
         if ids:
             url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
             interactions = requests.get(url+"+".join(ids)).json()
-            warnings = []
             for j in interactions['fullInteractionTypeGroup'][0]['fullInteractionType']:
                 warnings.append(j['interactionPair'][0]['description'])
 
