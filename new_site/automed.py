@@ -10,7 +10,7 @@ import scispacy  #pip install scispacy
 import en_ner_bc5cdr_md  #pip install https://s3-us-west-2.amazonaws.com/ai2-s2-scispacy/releases/v0.2.4/en_ner_bc5cdr_md-0.2.4.tar.gz
 import re
 import Levenshtein as lev #pip install python-levenshtein
-MATCH_RATIO = 0.9
+MATCH_RATIO = 0.8
 #import xmltodict
 
 #levenstiend dist search with match ratio
@@ -36,7 +36,7 @@ def correct_drug_name(drug, names):
             for word in row:
                 #Levenshtein distance ratio
                 ratio = lev.ratio(drug, word)
-                if ratio > 0.8:
+                if ratio > MATCH_RATIO:
                     return word
             return False
 
@@ -102,16 +102,6 @@ def getInteractions (interactionQuery):
     except Exception:
         return None
 
-
-def search(drug,row):
-    try:
-        if drug in row:
-            return True
-        else:
-            return False
-    except:
-        return False
-
 drug_data = pd.read_csv("substitutes.csv")
 drug_data["Trade_Name"] = drug_data["Trade_Name"].str.lower()
 drug_data["Ingredient"] = drug_data["Ingredient"].str.lower()
@@ -160,9 +150,9 @@ def handle_data():
                                 drug_name = correct_drug_name(drug, substitutes['Ingredient'])
                             prices = list(substitutes['Price'])
                             subs = list(substitutes['Trade_Name'])
-                            result.append({'name':drug.upper(),'num':n,'s':subs,'p':prices})
+                            result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
                         else:
-                            no.append(drug)
+                            no.append(drug.upper())
                 #print(getInteractions("+".join(interaction)))
                 return render_template("automed_success.html", result = result,no=no)
 
@@ -183,9 +173,9 @@ def handle_data_backend(new_pres_drug):
                         drug_name = correct_drug_name(drug, substitutes['Ingredient'])
                     prices = list(substitutes['Price'])
                     subs = list(substitutes['Trade_Name'])
-                    result.append({'name':drug.upper(),'num':n,'s':subs,'p':prices})
+                    result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
                 else:
-                    no.append(drug.lower())
+                    no.append(drug.upper())
         #print(getInteractions("+".join(interaction)))
         return render_template("automed_success.html", result = result,no=no)
 
