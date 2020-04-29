@@ -11,7 +11,7 @@ import en_ner_bc5cdr_md  #pip install https://s3-us-west-2.amazonaws.com/ai2-s2-
 import re
 import Levenshtein as lev #pip install python-levenshtein
 MATCH_RATIO = 0.8
-#import xmltodict
+import xmltodict
 
 #levenstiend dist search with match ratio
 def search(drug,row):
@@ -136,6 +136,8 @@ def handle_data():
                 new_pres_drug = new_pres_drug.lower().split(",")
                 result = []
                 no = []
+                url = "https://rxnav.nlm.nih.gov/REST/rxcui?name="
+                ids = []
                 #interaction=[]
                 for drug in new_pres_drug:  
                         #interaction.append(getRxCui(drug))
@@ -153,12 +155,26 @@ def handle_data():
                             result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
                         else:
                             no.append(drug.upper())
-                #print(getInteractions("+".join(interaction)))
-                return render_template("automed_success.html", result = result,no=no)
+                        
+                        drug_id = xmltodict.parse(requests.get(url+drug_name).text)
+                        response = drug_id['rxnormdata']['idGroup']
+                        if 'rxnormId' in response:
+                            ids.append(response['rxnormId'])
+                warnings=[]
+
+                url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
+                interactions = requests.get(url+"+".join(ids)).json()
+                if 'fullInteractionTypeGroup' in interactions:
+                    for j in interactions['fullInteractionTypeGroup'][0]['fullInteractionType']:
+                        warnings.append([j['interactionPair'][0]['description'],j['minConcept'][0]['name'],j['minConcept'][1]['name']])
+                return render_template("automed_success.html", result = result, no=no, warnings=warnings)
+    
 
 def handle_data_backend(new_pres_drug): 
         result = []
         no = []
+        url = "https://rxnav.nlm.nih.gov/REST/rxcui?name="
+        ids = []
         #interaction=[]         
         for drug in new_pres_drug:  
                 #interaction.append(getRxCui(drug))
@@ -176,8 +192,23 @@ def handle_data_backend(new_pres_drug):
                     result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
                 else:
                     no.append(drug.upper())
-        #print(getInteractions("+".join(interaction)))
-        return render_template("automed_success.html", result = result,no=no)
+                #find interaction of this drug
+                drug_id = xmltodict.parse(requests.get(url+drug_name).text)
+                response = drug_id['rxnormdata']['idGroup']
+                if 'rxnormId' in response:
+                    ids.append(response['rxnormId'])
+
+        new_pres_drug = request.form['drug']
+        new_pres_drug = new_pres_drug.lower().split(",")
+
+        warnings = []
+
+        url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
+        interactions = requests.get(url+"+".join(ids)).json()
+        if 'fullInteractionTypeGroup' in interactions:
+            for j in interactions['fullInteractionTypeGroup'][0]['fullInteractionType']:
+                warnings.append([j['interactionPair'][0]['description'],j['minConcept'][0]['name'],j['minConcept'][1]['name']])
+        return render_template("automed_success.html", result = result, no=no, warnings=warnings)
 
 
 
