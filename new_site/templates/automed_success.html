@@ -5,28 +5,40 @@
 	</head>
 
 	<style type="text/css"> 
-		th: tr{ color: blue; } 
+		@import url(https://fonts.googleapis.com/css?family=Open+Sans);
+		table {
+				box-shadow: 0px 2px 10px rgba(0,0,0,0.1);
+				padding: 30px 20px;
+			}
+		th: tr{ color: #4A9AEC; } 
 		tr: nth-of-type(2n){ 
-    		border: 1px solid grey; 
-    		background-color: rgba(150, 150, 150, 0.5);
+    		border: 1px solid #F0F0F0;
+    		background-color: #ffffff;
     		} 
     	td{
-    		padding: 8px 8px;
-    		border: 1px solid grey;
-    		} 
-    </style>
+	    		padding: 10px 10px;
+	    		border: 1px solid #F0F0F0;
+	    		border-radius: 10px;
+	    		} 
+	
+	    	body {
+	    		font-family: 'Open Sans', sans-serif;
+	    		background-color: #F7FCFF;
+	    	}
+	
+	    </style>
 
 	<Body> 
 		{%if result|length > 0%}
 			{%for i in range(result|length)%}
 				{%if result[i].num > 1%}
-					<h1>{{result[i].name}} top {{result[i].num}} alternatives:</h1>
+					<h1><center><strong>{{result[i].name}}: top {{result[i].num}} alternatives</strong></center></h1>
 				{%else%}
-					<h1>{{result[i].name}} top alternative:</h1>
+					<h1><center><strong>{{result[i].name}}: top alternative</strong></center></h1>
 				{%endif%}
-				<table style="margin-left: 20px;"> 
+				<center><table style="margin-left: 20px;"> 
 				    <th> 
-				        <tr style="color: blue; ">     
+				        <tr style="color: #4A9AEC;">     
 				        <td>Rank</td> 
 				        <td>Alternate</td> 
 				        <td>Price</td>
@@ -37,16 +49,27 @@
 				  		<tr> 
 				        	<td>{{alt+1}}</td> 
 				        	<td>{{result[i].s[alt]}}</td> 
-				        	<td>{{result[i].p[alt]}}</td> 
+				        	<td>${{result[i].p[alt]}}</td> 
 				    	</tr> 
 				    {%endfor%} 
-				</table> 
+				</table></center> 
 			{%endfor%}
 		{%endif%}
 
 		{%if no|length > 0%}
+
 			{%for i in range(0,no|length)%}
-				<h1>No alternatives found for drug: {{ no[i] }}</h1>
+				<h1><center><strong>{{ no[i] }}: No alternative found</strong></center></h1>
+			{%endfor%}
+		{%endif%}
+
+		<br/><br/>
+
+		{%if warnings|length > 0%}
+			<hr>
+			<h1 style="color:#E35646"><center><strong>Interaction warnings:</strong></center></h1>
+			{%for i in range(0,warnings|length)%}
+				<p><center>{{i+1}}. {{ warnings[i][1] }} + {{ warnings[i][2] }} : {{ warnings[i][0] }}</center></p>
 			{%endfor%}
 		{%endif%}
 	</Body>
