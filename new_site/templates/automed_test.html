@@ -14,7 +14,9 @@ body {
 * {
   box-sizing: border-box;
 }
-
+input {
+    background-color: #DFF2FD;
+  }
 /* Remove margins and padding from the list */
 ul {
   margin: 0;
@@ -84,9 +86,9 @@ ul li.checked::before {
 
 /* Style the header */
 .header {
-  background-color: #f44336;
+  background-color: #DFF2FD;
   padding: 30px 40px;
-  color: white;
+  color: #000;
   text-align: center;
 }
 
@@ -114,35 +116,38 @@ input {
   padding: 10px;
   float: left;
   font-size: 16px;
+  border-bottom: 1px solid #000;
 }
 
 /* Style the "Add" button */
-.addBtn {
-  padding: 10px;
-  width: 25%;
-  background: #d9d9d9;
-  color: #555;
-  float: left;
-  text-align: center;
-  font-size: 16px;
-  cursor: pointer;
-  transition: 0.3s;
-  border-radius: 0;
-}
+  .addBtn {
+    padding: 10px;
+    width: 25%;
+    background: #ffffff;
+    border: 1px solid #80CAF7;
+    color: #000;
+    float: left;
+    text-align: center;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+    border-radius: 0;
+  }
 
-.addBtn:hover {
-  background-color: #bbb;
-}
+  .addBtn:hover {
+    background-color: #80CAF7;
+    color: #fff;
+  }
 </style>
 </head>
 <body>
 
-<div id="myDIV" class="header">
-  <h2 style="margin:5px">Enter Your Prescription Medications</h2>
-  <img src="static/images/automed-logo.png">
-  <input type="text" id="myInput" placeholder="Title...">
-  <span onclick="newElement()" class="addBtn">Add</span>
-</div>
+  <div id="myDIV" class="header">
+    <!--h2 style="margin:5px; font-size: 30px; color:#000; padding-bottom: 20px;">Enter Your Prescription Medications</h2-->
+    <center><img src="static/images/automed-logo.png"></center>
+    <input type="text" id="myInput" placeholder="Enter Your Prescription Medications">
+    <span onclick="newElement()" class="addBtn" style="border-radius:25px;">Add</span>
+  </div>
 
 <ul id="myUL">
   
@@ -209,14 +214,14 @@ function myFunction() {
 
 </script>
 
-<div class="login">
-    <h1></h1>
-    <form action="/handle_data" method="post">
-        <input type="text" name="drug" placeholder="Your Prescription Drugs" id = 'drugList' required="required" style="display: none;"/>
-        <button type="submit" class="btn btn-primary btn-block btn-large" style="display: none;">Submit</button>
-    </form>
-    <button type="Other Submit" id= 'submitButton' class="btn btn-primary btn-block btn-large" onclick="myFunction()">Submit</button>
-</div>
+  <div class="login">
+      <h1></h1>
+      <form action="/handle_data" method="post">
+          <input type="text" name="drug" placeholder="Your Prescription Drugs" id = 'drugList' required="required" style="display: none;"/>
+          <center><button type="submit" class="btn btn-primary btn-block btn-large" style="display: none; width: 80%;">Submit</button></center>
+      </form>
+      <button type="Other Submit" id= 'submitButton' class="btn btn-primary btn-block btn-large" onclick="myFunction()">Submit</button>
+  </div>
 
 </body>
 </html>
