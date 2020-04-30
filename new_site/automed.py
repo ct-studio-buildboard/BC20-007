@@ -11,6 +11,7 @@ import en_ner_bc5cdr_md  #pip install https://s3-us-west-2.amazonaws.com/ai2-s2-
 import re
 import Levenshtein as lev #pip install python-levenshtein
 MATCH_RATIO = 0.8
+DEBUG = True
 import xmltodict
 
 #levenstiend dist search with match ratio
@@ -152,14 +153,15 @@ def handle_data():
                                 drug_name = correct_drug_name(drug, substitutes['Ingredient'])
                             prices = list(substitutes['Price'])
                             subs = list(substitutes['Trade_Name'])
-                            result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
+                            if drug_name:
+                                result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
                         else:
                             no.append(drug.upper())
-                        
-                        drug_id = xmltodict.parse(requests.get(url+drug_name).text)
-                        response = drug_id['rxnormdata']['idGroup']
-                        if 'rxnormId' in response:
-                            ids.append(response['rxnormId'])
+                        if drug_name:
+                            drug_id = xmltodict.parse(requests.get(url+drug_name).text)
+                            response = drug_id['rxnormdata']['idGroup']
+                            if 'rxnormId' in response:
+                                ids.append(response['rxnormId'])
                 warnings=[]
 
                 url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
@@ -177,6 +179,7 @@ def handle_data_backend(new_pres_drug):
         ids = []
         #interaction=[]         
         for drug in new_pres_drug:  
+                if DEBUG: print(drug)
                 #interaction.append(getRxCui(drug))
                 a = drug_data.apply(lambda row : search(drug.lower(),row['Ingredient']), axis = 1)
                 b = drug_data.apply(lambda row : search(drug.lower(),row['Name']), axis = 1)
@@ -188,16 +191,17 @@ def handle_data_backend(new_pres_drug):
                         drug_name = correct_drug_name(drug, substitutes['Ingredient'])
                     prices = list(substitutes['Price'])
                     subs = list(substitutes['Trade_Name'])
-                    result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
+                    if drug_name:
+                        result.append({'name':drug_name.upper(),'num':n,'s':subs,'p':prices})
                 else:
                     no.append(drug.upper())
                 #find interaction of this drug
-                print(drug_name)
-                drug_id = xmltodict.parse(requests.get(url+drug_name).text)
-                response = drug_id['rxnormdata']['idGroup']
-                if 'rxnormId' in response:
-                    ids.append(response['rxnormId'])
-                print(drug_id)
+                if drug_name:
+                    drug_id = xmltodict.parse(requests.get(url+drug_name).text)
+                    response = drug_id['rxnormdata']['idGroup']
+                    if 'rxnormId' in response:
+                        ids.append(response['rxnormId'])
+                    print(drug_id)
         warnings = []
 
         url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
