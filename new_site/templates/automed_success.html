@@ -65,13 +65,6 @@
 			{%endfor%}
 		{%endif%}
 
-		{%if no|length > 0%}
-
-			{%for i in range(0,no|length)%}
-				<h1><center><strong><span class = "capitalize">{{ no[i] }}</span>: No alternative found</strong></center></h1>
-			{%endfor%}
-		{%endif%}
-
 		<br/><br/>
 
 		{%if warnings|length > 0%}
