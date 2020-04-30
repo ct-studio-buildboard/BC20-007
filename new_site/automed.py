@@ -182,7 +182,6 @@ def handle_data_backend(new_pres_drug):
                 b = drug_data.apply(lambda row : search(drug.lower(),row['Name']), axis = 1)
                 substitutes = drug_data[a | b].sort_values('Price').head(5)
                 n = len(substitutes)
-
                 if n > 0 and drug:
                     drug_name = correct_drug_name(drug, substitutes['Name'])
                     if not drug_name:
@@ -193,21 +192,21 @@ def handle_data_backend(new_pres_drug):
                 else:
                     no.append(drug.upper())
                 #find interaction of this drug
+                print(drug_name)
                 drug_id = xmltodict.parse(requests.get(url+drug_name).text)
                 response = drug_id['rxnormdata']['idGroup']
                 if 'rxnormId' in response:
                     ids.append(response['rxnormId'])
-
-        new_pres_drug = request.form['drug']
-        new_pres_drug = new_pres_drug.lower().split(",")
-
+                print(drug_id)
         warnings = []
 
         url = "https://rxnav.nlm.nih.gov/REST/interaction/list.json?rxcuis="
         interactions = requests.get(url+"+".join(ids)).json()
+        print(interactions)
         if 'fullInteractionTypeGroup' in interactions:
             for j in interactions['fullInteractionTypeGroup'][0]['fullInteractionType']:
                 warnings.append([j['interactionPair'][0]['description'],j['minConcept'][0]['name'],j['minConcept'][1]['name']])
+        print(result,no,warnings)
         return render_template("automed_success.html", result = result, no=no, warnings=warnings)
 
 
