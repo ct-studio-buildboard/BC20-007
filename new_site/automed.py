@@ -146,7 +146,7 @@ def handle_data():
                         b = drug_data.apply(lambda row : search(drug,row['Name']), axis = 1)
                         substitutes = drug_data[a | b].sort_values('Price').head(5)
                         n = len(substitutes)
-
+                        drug_name=False
                         if n > 0 and drug:
                             drug_name = correct_drug_name(drug, substitutes['Name'])
                             if not drug_name:
@@ -185,6 +185,7 @@ def handle_data_backend(new_pres_drug):
                 b = drug_data.apply(lambda row : search(drug.lower(),row['Name']), axis = 1)
                 substitutes = drug_data[a | b].sort_values('Price').head(5)
                 n = len(substitutes)
+                drug_name = False
                 if n > 0 and drug:
                     drug_name = correct_drug_name(drug, substitutes['Name'])
                     if not drug_name:
