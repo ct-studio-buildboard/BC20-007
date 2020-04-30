@@ -21,10 +21,19 @@
 	    		border-radius: 10px;
 	    		} 
 	
-	    	body {
-	    		font-family: 'Open Sans', sans-serif;
-	    		background-color: #F7FCFF;
-	    	}
+    	body {
+    		font-family: 'Open Sans', sans-serif;
+    		background-color: #F7FCFF;
+    	}
+
+	    .capitalize {
+		 	text-transform: lowercase;
+		  	display: inline-block;
+		}
+
+		.capitalize:first-letter {
+		  	text-transform: uppercase
+		}
 	
 	    </style>
 
@@ -32,9 +41,9 @@
 		{%if result|length > 0%}
 			{%for i in range(result|length)%}
 				{%if result[i].num > 1%}
-					<h1><center><strong>{{result[i].name}}: top {{result[i].num}} alternatives</strong></center></h1>
+					<h1><center><strong><span class = "capitalize">{{result[i].name}}</span>: Top {{result[i].num}} alternatives</strong></center></h1>
 				{%else%}
-					<h1><center><strong>{{result[i].name}}: top alternative</strong></center></h1>
+					<h1><center><strong><span class = "capitalize">{{result[i].name}}</span>: Top alternative</strong></center></h1>
 				{%endif%}
 				<center><table style="margin-left: 20px;"> 
 				    <th> 
@@ -48,7 +57,7 @@
 				    {% for alt in range(result[i].num) %}
 				  		<tr> 
 				        	<td>{{alt+1}}</td> 
-				        	<td>{{result[i].s[alt]}}</td> 
+				        	<td style="text-transform: capitalize">{{result[i].s[alt]}}</td> 
 				        	<td>${{result[i].p[alt]}}</td> 
 				    	</tr> 
 				    {%endfor%} 
@@ -59,7 +68,7 @@
 		{%if no|length > 0%}
 
 			{%for i in range(0,no|length)%}
-				<h1><center><strong>{{ no[i] }}: No alternative found</strong></center></h1>
+				<h1><center><strong><span class = "capitalize">{{ no[i] }}</span>: No alternative found</strong></center></h1>
 			{%endfor%}
 		{%endif%}
 
